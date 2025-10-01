@@ -1,0 +1,16 @@
+{
+  "name": "autocheck",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n \"DOCKER,API,WEB\" -c \"cyan,blue,magenta\" \"docker compose up -d db\" \"npm run dev:wait-db\" \"cd apps/web && npm run dev\"",
+    "dev:wait-db": "npm run wait-db && cd apps/api && npm run dev",
+    "wait-db": "node -e \"const{exec}=require('child_process');const w=()=>exec('docker compose ps db --format json',(_,o)=>{try{const s=JSON.parse(o);if(s.Health==='healthy'||s.State==='running')console.log('✓ DB ready'),process.exit(0)}catch{}setTimeout(w,2000)});console.log('⏳ Aguardando DB...');w()\"",
+    "dev:api": "cd apps/api && npm run dev",
+    "dev:web": "cd apps/web && npm run dev",
+    "stop": "docker compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
