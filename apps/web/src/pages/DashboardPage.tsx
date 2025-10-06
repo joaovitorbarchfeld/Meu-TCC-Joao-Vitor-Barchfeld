@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Bell, Settings, Car, Users, FileText, Calendar, BarChart3, Shield, Wrench, MapPin } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Bell, Settings, Car, Users, FileText, Calendar, Cpu } from 'lucide-react'; import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 
 
@@ -21,14 +20,11 @@ const DashboardPage = () => {
   }, []);
 
   const modules = [
-    { id: 1, name: 'Veículos', icon: Car, },
+    { id: 1, name: 'Veículos', icon: Car },
     { id: 2, name: 'Usuários', icon: Users },
     { id: 3, name: 'Relatórios', icon: FileText },
     { id: 4, name: 'Agenda', icon: Calendar },
-    { id: 5, name: 'Analytics', icon: BarChart3 },
-    { id: 6, name: 'Segurança', icon: Shield },
-    { id: 7, name: 'Manutenção', icon: Wrench },
-    { id: 8, name: 'Rastreamento', icon: MapPin }
+    { id: 5, name: 'Dispositivos', icon: Cpu }
   ];
 
   const getStatusInfo = (status: string) => {
@@ -71,49 +67,53 @@ const DashboardPage = () => {
 
             {/* -------------------------------------------------------- */}
 
-            {modules.map((module) => (
-              <button
-                key={module.id}
-                onClick={() => {
-                  if (module.name === 'Veículos') {
-                    navigate('/veiculos');
-                  } else if (module.name === 'Agenda') {
-                    navigate('/reservas');
-                  }
-                }}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  width: '100px',
-                  height: '100px'
-                }}
-              >
-                <div style={{
-                  width: '70px',
-                  height: '70px',
-                  background: 'rgba(0,0,0,0.6)',
-                  borderRadius: '9999px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <module.icon size={42} color="#fff" strokeWidth={1.5} />
-                </div>
-                <span style={{
-                  marginTop: '8px',
-                  fontSize: '12px',
-                  color: '#d1d5db',
-                  fontWeight: '500',
-                  textAlign: 'center'
-                }}>
-                  {module.name}
-                </span>
-              </button>
-            ))}
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '60px auto', paddingRight: '340px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 100px)', gap: '20px', width: '580px' }}>
+                {modules.map((module) => (
+                  <button
+                    key={module.id}
+                    onClick={() => {
+                      if (module.name === 'Veículos') navigate('/veiculos');
+                      if (module.name === 'Agenda') navigate('/reservas');
+                      if (module.name === 'Usuários') navigate('/usuarios');
+                      if (module.name === 'Dispositivos') navigate('/dispositivos');
+                      if (module.name === 'Relatórios') navigate('/relatorios');
+                    }}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      width: '100px',
+                      height: '100px'
+                    }}
+                  >
+                    <div style={{
+                      width: '70px',
+                      height: '70px',
+                      background: 'rgba(0,0,0,0.6)',
+                      borderRadius: '9999px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <module.icon size={42} color="#fff" strokeWidth={1.5} />
+                    </div>
+                    <span style={{
+                      marginTop: '8px',
+                      fontSize: '12px',
+                      color: '#d1d5db',
+                      fontWeight: '500',
+                      textAlign: 'center'
+                    }}>
+                      {module.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* -------------------------------------------------------- */}
 

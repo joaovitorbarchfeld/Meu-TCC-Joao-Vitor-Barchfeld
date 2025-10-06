@@ -4,6 +4,11 @@ import DashboardPage from './pages/DashboardPage';
 import './index.css';
 import VeiculosPage from './pages/VeiculosPage';
 import ReservasPage from './pages/ReservasPage';
+import UsuariosPage from './pages/UsuariosPage';
+import DispositivosPage from './pages/DispositivosPage';   
+import RelatoriosPage from './pages/RelatoriosPage';
+
+
 
 // Componente de rota protegida
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -37,6 +42,30 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/dispositivos"
+          element={
+            <ProtectedRoute>
+              <DispositivosPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <ProtectedRoute>
+              <UsuariosPage />
+            </ProtectedRoute>
+          }
+        />
+          <Route 
+     path="/relatorios" 
+     element={
+       <ProtectedRoute>
+         <RelatoriosPage />
+       </ProtectedRoute>
+     } 
+   />
         <Route
           path="/reservas"
           element={
