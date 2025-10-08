@@ -14,7 +14,6 @@ export class UsuariosService {
         eb.or([
           eb('nome', 'ilike', `%${filters.q}%`),
           eb('email', 'ilike', `%${filters.q}%`),
-          eb('cpf', 'ilike', `%${filters.q}%`),
         ])
       );
     }
@@ -81,19 +80,6 @@ export class UsuariosService {
     }
 
     return usuario;
-  }
-
-  async toggleActive(id: string) {
-    const current = await this.findById(id);
-    return await db
-      .updateTable('usuarios')
-      .set({
-        ativo: !current.ativo,
-        updated_at: new Date(),
-      })
-      .where('id', '=', id)
-      .returningAll()
-      .executeTakeFirstOrThrow();
   }
 
   async delete(id: string) {

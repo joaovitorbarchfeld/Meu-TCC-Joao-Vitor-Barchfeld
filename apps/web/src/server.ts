@@ -1,15 +1,17 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { logger } from './utils/logger';
-import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
+import { logger } from '@/utils/logger';
+import { errorHandler, notFoundHandler } from '@/middlewares/errorHandler';
 
 // Importar rotas
-import { authRouter } from './routes/auth.routes';
-import { dashboardRouter } from './routes/dashboard.routes';
-import { reservasRouter } from './routes/reservas.routes';
-import { veiculosRouter } from './routes/veiculos.routes';
-import { usuariosRouter } from './routes/usuarios.routes';
+import { authRouter } from '@/routes/auth.routes';
+import { dashboardRouter } from '@/routes/dashboard.routes';
+import { veiculosRouter } from '@/routes/veiculos.routes';
+import { reservasRouter } from '@/routes/reservas.routes';
+import { usuariosRouter } from '@/routes/usuarios.routes';
+import { dispositivosRouter } from '@/routes/dispositivos.routes';
+import { relatoriosRouter } from '@/routes/relatorios.routes';
 
 // Criar app Express
 const app = express();
@@ -51,6 +53,8 @@ app.use('/dashboard', dashboardRouter);
 app.use('/veiculos', veiculosRouter);
 app.use('/reservas', reservasRouter);
 app.use('/usuarios', usuariosRouter);
+app.use('/dispositivos', dispositivosRouter);
+app.use('/relatorios', relatoriosRouter);
 
 // Error handlers
 app.use(notFoundHandler);

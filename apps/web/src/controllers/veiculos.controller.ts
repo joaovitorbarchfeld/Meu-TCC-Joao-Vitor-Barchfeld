@@ -1,21 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
-import { UsuariosService } from '@/services/usuarios.service';
-import { UsuarioCreateSchema, UsuarioUpdateSchema } from '@/validators/usuarios.schemas';
+import { VeiculosService } from '@/services/veiculos.service';
+import { VeiculoCreateSchema, VeiculoUpdateSchema } from '@/validators/veiculos.schemas';
 
-export class UsuariosController {
-  private usuariosService = new UsuariosService();
+export class VeiculosController {
+  private veiculosService = new VeiculosService();
 
   async list(req: Request, res: Response, next: NextFunction) {
     try {
       const filters = {
         q: req.query.q as string,
-        perfil: req.query.perfil as string,
+        tipo: req.query.tipo as string,
         ativo: req.query.ativo === 'true' ? true : req.query.ativo === 'false' ? false : undefined,
         page: req.query.page ? parseInt(req.query.page as string) : undefined,
         size: req.query.size ? parseInt(req.query.size as string) : undefined,
       };
-      const usuarios = await this.usuariosService.list(filters);
-      res.json(usuarios);
+      const veiculos = await this.veiculosService.list(filters);
+      res.json(veiculos);
     } catch (error) {
       next(error);
     }
@@ -23,8 +23,8 @@ export class UsuariosController {
 
   async findById(req: Request, res: Response, next: NextFunction) {
     try {
-      const usuario = await this.usuariosService.findById(req.params.id);
-      res.json(usuario);
+      const veiculo = await this.veiculosService.findById(req.params.id);
+      res.json(veiculo);
     } catch (error) {
       next(error);
     }
@@ -32,9 +32,9 @@ export class UsuariosController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const body = UsuarioCreateSchema.parse(req.body);
-      const usuario = await this.usuariosService.create(body);
-      res.status(201).json(usuario);
+      const body = VeiculoCreateSchema.parse(req.body);
+      const veiculo = await this.veiculosService.create(body);
+      res.status(201).json(veiculo);
     } catch (error) {
       next(error);
     }
@@ -42,9 +42,9 @@ export class UsuariosController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const body = UsuarioUpdateSchema.parse(req.body);
-      const usuario = await this.usuariosService.update(req.params.id, body);
-      res.json(usuario);
+      const body = VeiculoUpdateSchema.parse(req.body);
+      const veiculo = await this.veiculosService.update(req.params.id, body);
+      res.json(veiculo);
     } catch (error) {
       next(error);
     }
@@ -52,9 +52,9 @@ export class UsuariosController {
 
   async toggleActive(req: Request, res: Response, next: NextFunction) {
     try {
-      const current = await this.usuariosService.findById(req.params.id);
-      const usuario = await this.usuariosService.update(req.params.id, { ativo: !current.ativo });
-      res.json(usuario);
+      const current = await this.veiculosService.findById(req.params.id);
+      const veiculo = await this.veiculosService.update(req.params.id, { ativo: !current.ativo });
+      res.json(veiculo);
     } catch (error) {
       next(error);
     }
@@ -62,7 +62,7 @@ export class UsuariosController {
 
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
-      await this.usuariosService.delete(req.params.id);
+      await this.veiculosService.delete(req.params.id);
       res.status(204).send();
     } catch (error) {
       next(error);
