@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { authJWT } from '@/middlewares/authJWT';
-import { UsuariosController } from '@/controllers/usuarios.controller';
+import { authJWT } from '../middlewares/authJWT';
+import { UsuariosController } from '../controllers/usuarios.controller';
 
 const router = Router();
 const usuariosController = new UsuariosController();
