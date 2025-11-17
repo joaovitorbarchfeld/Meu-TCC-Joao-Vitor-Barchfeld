@@ -2,19 +2,22 @@
 
 export const veiculoCreateSchema = z.object({
   nome: z.string().min(1, 'Nome é obrigatório').max(100),
-  placa: z.string().regex(/^[A-Z]{3}-\d{4}$/, 'Placa inválida (formato: ABC-1234)'),
+  placa: z.string().regex(/^[A-Z]{3}-?\d{1}[A-Z0-9]{1}\d{2}$|^[A-Z]{3}-?\d{4}$/, 'Placa inválida (formatos: ABC1234, ABC-1234, ABC1D23)'),
   tipo: z.enum(['sedan', 'suv', 'pickup', 'van', 'hatch']),
   combustivel: z.enum(['gasolina', 'etanol', 'diesel', 'flex', 'eletrico', 'hibrido']),
-  cor_hex: z.string().regex(/^#[0-9A-F]{6}$/i, 'Cor hex inválida (formato: #RRGGBB)').default('#6B7280'),
+  modelo: z.string().max(100).optional(),
+  cor: z.string().optional(),
   ano: z.number().int().min(1900).max(new Date().getFullYear() + 1).nullable().optional(),
+  ativo: z.boolean().optional().default(true),
 });
 
 export const veiculoUpdateSchema = z.object({
   nome: z.string().min(1).max(100).optional(),
-  placa: z.string().regex(/^[A-Z]{3}-\d{4}$/).optional(),
+  placa: z.string().regex(/^[A-Z]{3}-?\d{1}[A-Z0-9]{1}\d{2}$|^[A-Z]{3}-?\d{4}$/).optional(),
   tipo: z.enum(['sedan', 'suv', 'pickup', 'van', 'hatch']).optional(),
   combustivel: z.enum(['gasolina', 'etanol', 'diesel', 'flex', 'eletrico', 'hibrido']).optional(),
-  cor_hex: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
+  modelo: z.string().max(100).optional(),
+  cor: z.string().optional(),
   ano: z.number().int().min(1900).max(new Date().getFullYear() + 1).nullable().optional(),
   ativo: z.boolean().optional(),
 });
