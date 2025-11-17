@@ -1,0 +1,16 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#2563eb" rx="12"/>
+  <g fill="white">
+    <!-- Corpo do carro -->
+    <rect x="12" y="32" width="40" height="16" rx="2"/>
+    <!-- Janelas -->
+    <path d="M20 28 L28 20 L36 20 L44 28 L20 28" fill="#2563eb"/>
+    <!-- Rodas -->
+    <circle cx="20" cy="48" r="6" fill="#1e40af"/>
+    <circle cx="44" cy="48" r="6" fill="#1e40af"/>
+    <circle cx="20" cy="48" r="3" fill="#60a5fa"/>
+    <circle cx="44" cy="48" r="3" fill="#60a5fa"/>
+    <!-- Farol -->
+    <circle cx="50" cy="36" r="2" fill="#fbbf24"/>
+  </g>
+</svg>
