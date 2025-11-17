@@ -38,6 +38,14 @@ export class VeiculosService {
 
     const veiculos = await query.execute();
 
+    // Adicionar status para cada veículo
+    const veiculosComStatus = await Promise.all(
+      veiculos.map(async (veiculo) => ({
+        ...veiculo,
+        status: await this.getVeiculoStatus(veiculo.id),
+      }))
+    );
+
     // Contar total
     let countQuery = db.selectFrom('veiculos').select(db.fn.count('id').as('total'));
     
@@ -57,7 +65,7 @@ export class VeiculosService {
     const total = Number(countResult?.total || 0);
 
     return {
-      data: veiculos,
+      data: veiculosComStatus,
       meta: {
         page: filters.page,
         size: filters.size,

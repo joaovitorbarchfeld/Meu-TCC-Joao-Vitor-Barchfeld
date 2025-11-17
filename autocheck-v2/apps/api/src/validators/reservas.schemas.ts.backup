@@ -1,16 +1,10 @@
 ﻿import { z } from 'zod';
 
-// Aceita datetime com ou sem timezone
-const dateTimeSchema = z.string().refine(
-  (val) => !isNaN(Date.parse(val)),
-  { message: 'Data inválida' }
-);
-
 export const reservaCreateSchema = z.object({
   veiculo_id: z.string().uuid('ID do veículo inválido'),
   usuario_id: z.string().uuid('ID do usuário inválido').optional(),
-  start_at: dateTimeSchema,
-  end_at: dateTimeSchema,
+  start_at: z.string().datetime('Data de início inválida'),
+  end_at: z.string().datetime('Data de fim inválida'),
   motivo: z.string().max(500, 'Motivo deve ter no máximo 500 caracteres').optional(),
 }).refine(
   (data) => new Date(data.start_at) < new Date(data.end_at),
@@ -21,8 +15,8 @@ export const reservaCreateSchema = z.object({
 );
 
 export const reservaUpdateSchema = z.object({
-  start_at: dateTimeSchema.optional(),
-  end_at: dateTimeSchema.optional(),
+  start_at: z.string().datetime('Data de início inválida').optional(),
+  end_at: z.string().datetime('Data de fim inválida').optional(),
   motivo: z.string().max(500).optional(),
 }).refine(
   (data) => {
@@ -35,8 +29,8 @@ export const reservaUpdateSchema = z.object({
 );
 
 export const reservaFilterSchema = z.object({
-  start: dateTimeSchema.optional(),
-  end: dateTimeSchema.optional(),
+  start: z.string().datetime().optional(),
+  end: z.string().datetime().optional(),
   veiculo_id: z.string().uuid().optional(),
   usuario_id: z.string().uuid().optional(),
   status: z.enum(['ativa', 'futura', 'passada', 'todas']).default('todas'),
@@ -45,8 +39,8 @@ export const reservaFilterSchema = z.object({
 });
 
 export const reservaCalendarioSchema = z.object({
-  start: dateTimeSchema,
-  end: dateTimeSchema,
+  start: z.string().datetime('Data de início obrigatória'),
+  end: z.string().datetime('Data de fim obrigatória'),
   veiculo_id: z.string().uuid().optional(),
 });
 
