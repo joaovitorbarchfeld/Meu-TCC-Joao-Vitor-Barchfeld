@@ -27,7 +27,7 @@ api.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refresh_token');
         if (refreshToken) {
-          const { data } = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+          const { data } = await axios.post(`/auth/refresh`, {
             refresh_token: refreshToken,
           });
           localStorage.setItem('access_token', data.access_token);
@@ -48,7 +48,7 @@ api.interceptors.response.use(
 // AUTH
 export const authApi = {
   login: async (email: string, password: string): Promise<LoginResponse> => {
-    const { data } = await axios.post(`${API_BASE_URL}/auth/login`, {
+    const { data } = await axios.post(`/auth/login`, {
       login: email,
       password,
     });
