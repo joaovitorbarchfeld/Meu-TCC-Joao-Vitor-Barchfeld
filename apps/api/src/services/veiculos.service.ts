@@ -125,6 +125,10 @@ export class VeiculosService {
   }
 
   async update(id: string, input: VeiculoUpdateInput) {
+    // LOG PARA DEBUG
+    console.log('=== UPDATE VEICULO ===');
+    console.log('ID:', id);
+    console.log('Input recebido:', JSON.stringify(input, null, 2));
     // Verificar se existe
     const existe = await db
       .selectFrom('veiculos')
