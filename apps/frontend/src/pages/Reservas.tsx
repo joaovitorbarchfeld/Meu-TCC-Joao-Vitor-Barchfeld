@@ -12,11 +12,13 @@ export default function Reservas() {
   const { user } = useAuth();
   const [reservas, setReservas] = useState<Reserva[]>([]);
   const [veiculos, setVeiculos] = useState<Veiculo[]>([]);
+  const [usuarios, setUsuarios] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   // Form states
   const [veiculoId, setVeiculoId] = useState('');
+  const [usuarioId, setUsuarioId] = useState('');
   const [startAt, setStartAt] = useState('');
   const [endAt, setEndAt] = useState('');
   const [motivo, setMotivo] = useState('');
@@ -35,6 +37,7 @@ export default function Reservas() {
       ]);
       setReservas(reservasData);
       setVeiculos(veiculosData.filter(v => v.ativo));
+      setUsuarios(usuariosData.filter((u: any) => u.ativo));
     } catch (err) {
       console.error('Erro ao carregar dados:', err);
     } finally {
@@ -78,6 +81,7 @@ export default function Reservas() {
 
   const resetForm = () => {
     setVeiculoId('');
+    setUsuarioId('');
     setStartAt('');
     setEndAt('');
     setMotivo('');

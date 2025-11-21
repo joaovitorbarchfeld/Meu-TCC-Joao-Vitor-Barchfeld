@@ -2,7 +2,7 @@
 
 export const reservaCreateSchema = z.object({
   veiculo_id: z.string().uuid('ID do veículo inválido'),
-  usuario_id: z.string().uuid('ID do usuário inválido').optional(),
+  usuario_id: z.string().uuid('ID do usuário inválido'),
   start_at: z.string().datetime('Data de início inválida'),
   end_at: z.string().datetime('Data de fim inválida'),
   motivo: z.string().max(500, 'Motivo deve ter no máximo 500 caracteres').optional(),
