@@ -2,7 +2,7 @@
 import type { LoginResponse, User, Veiculo, Reserva } from '../types';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/v1',
+  baseURL: 'http://138.94.76.170:30919/v1',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,7 +27,7 @@ api.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refresh_token');
         if (refreshToken) {
-          const { data } = await axios.post('http://localhost:3000/v1/auth/refresh', {
+          const { data } = await axios.post('http://138.94.76.170:30919/v1/auth/refresh', {
             refresh_token: refreshToken,
           });
 
@@ -51,7 +51,7 @@ api.interceptors.response.use(
 // AUTH
 export const authApi = {
   login: async (email: string, password: string): Promise<LoginResponse> => {
-    const { data } = await axios.post('http://localhost:3000/v1/auth/login', {
+    const { data } = await axios.post('http://138.94.76.170:30919/v1/auth/login', {
       login: email,
       password,
     });
