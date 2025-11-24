@@ -1,9 +1,9 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { reservasApi, veiculosApi } from '../services/api';
+import { reservasApi, veiculosApi, usuariosApi } from '../services/api';
 import { Calendar, Clock, Car, User, X, Plus, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import type { Reserva, Veiculo } from '../types';
+import type { Reserva, Veiculo, User as Usuario } from '../types';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -12,11 +12,13 @@ export default function Reservas() {
   const { user } = useAuth();
   const [reservas, setReservas] = useState<Reserva[]>([]);
   const [veiculos, setVeiculos] = useState<Veiculo[]>([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   // Form states
   const [veiculoId, setVeiculoId] = useState('');
+  const [usuarioId, setUsuarioId] = useState('');
   const [startAt, setStartAt] = useState('');
   const [endAt, setEndAt] = useState('');
   const [motivo, setMotivo] = useState('');
@@ -29,12 +31,14 @@ export default function Reservas() {
 
   const loadData = async () => {
     try {
-      const [reservasData, veiculosData] = await Promise.all([
+      const [reservasData, veiculosData, usuariosData] = await Promise.all([
         reservasApi.minhas(),
-        veiculosApi.list()
+        veiculosApi.list(),
+        usuariosApi.list()
       ]);
       setReservas(reservasData);
       setVeiculos(veiculosData.filter(v => v.ativo));
+      setUsuarios(usuariosData.filter(u => u.ativo));
     } catch (err) {
       console.error('Erro ao carregar dados:', err);
     } finally {
@@ -48,13 +52,16 @@ export default function Reservas() {
     setIsSubmitting(true);
 
     try {
-      await reservasApi.create({
+      const dados = {
         veiculo_id: veiculoId,
-        start_at: startAt,
-        end_at: endAt,
-        motivo
-      });
+        usuario_id: usuarioId,
+        start_at: startAt + ':00.000Z',
+        end_at: endAt + ':00.000Z',
+        motivo: motivo || undefined
+      };
+      console.log('Enviando:', dados);
 
+      await reservasApi.create(dados);
       setShowModal(false);
       resetForm();
       loadData();
@@ -78,6 +85,7 @@ export default function Reservas() {
 
   const resetForm = () => {
     setVeiculoId('');
+    setUsuarioId('');
     setStartAt('');
     setEndAt('');
     setMotivo('');
@@ -106,7 +114,6 @@ export default function Reservas() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #071327 0%, #2C0F4D 100%)' }}>
-      {/* Header */}
       <header style={{ padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button onClick={() => navigate('/dashboard')} style={{ padding: '0.5rem', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', color: '#fff' }}>
@@ -120,7 +127,6 @@ export default function Reservas() {
         </button>
       </header>
 
-      {/* Content */}
       <main style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
         {isLoading ? (
           <div style={{ textAlign: 'center', color: '#fff' }}>Carregando...</div>
@@ -180,7 +186,6 @@ export default function Reservas() {
         )}
       </main>
 
-      {/* Modal */}
       {showModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, padding: '1rem' }} onClick={() => setShowModal(false)}>
           <div style={{ background: '#1e293b', borderRadius: '1rem', maxWidth: '500px', width: '100%', padding: '2rem' }} onClick={e => e.stopPropagation()}>
@@ -201,9 +206,19 @@ export default function Reservas() {
               <div>
                 <label style={{ display: 'block', color: '#d1d5db', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Veículo</label>
                 <select value={veiculoId} onChange={e => setVeiculoId(e.target.value)} required style={{ width: '100%', padding: '0.75rem', background: '#334155', color: '#fff', border: '1px solid #475569', borderRadius: '0.5rem' }}>
-                  <option value="">Selecione um veículo</option>
+                  <option value="" style={{ color: '#000' }}>Selecione um veículo</option>
                   {veiculos.filter(v => v.status === 'disponivel').map(v => (
-                    <option key={v.id} value={v.id}>{v.nome} - {v.placa}</option>
+                    <option key={v.id} value={v.id} style={{ color: '#000' }}>{v.nome} - {v.placa}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', color: '#d1d5db', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Usuário Responsável</label>
+                <select value={usuarioId} onChange={e => setUsuarioId(e.target.value)} required style={{ width: '100%', padding: '0.75rem', background: '#334155', color: '#fff', border: '1px solid #475569', borderRadius: '0.5rem' }}>
+                  <option value="" style={{ color: '#000' }}>Selecione o usuário</option>
+                  {usuarios.map(u => (
+                    <option key={u.id} value={u.id} style={{ color: '#000' }}>{u.nome}</option>
                   ))}
                 </select>
               </div>
