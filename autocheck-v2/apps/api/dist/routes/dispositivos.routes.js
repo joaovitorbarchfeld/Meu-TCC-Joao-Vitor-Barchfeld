@@ -5,11 +5,9 @@ const authJWT_1 = require("../middlewares/authJWT");
 const dispositivos_controller_1 = require("../controllers/dispositivos.controller");
 const router = (0, express_1.Router)();
 // POST /v1/dispositivos/validar - Validação ESP32 (SEM autenticação JWT!)
-router.get("/sync", function (req, res, next) { res.json({ success: true, timestamp: new Date().toISOString(), total: 0, autorizacoes: [] }); });
 router.post('/validar', (req, res, next) => {
     dispositivos_controller_1.dispositivosController.validar(req, res).catch(next);
 });
-router.get("/sync", function (req, res, next) { res.json({ success: true, timestamp: new Date().toISOString(), total: 0, autorizacoes: [] }); });
 // Todas as outras rotas precisam de autenticação
 router.use(authJWT_1.authJWT);
 // GET /v1/dispositivos - Listar (gestor e admin)

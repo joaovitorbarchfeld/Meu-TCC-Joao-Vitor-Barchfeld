@@ -1,4 +1,4 @@
-﻿import { z } from 'zod';
+import { z } from 'zod';
 
 export const veiculoCreateSchema = z.object({
   nome: z.string().min(1, 'Nome é obrigatório').max(100),
@@ -6,7 +6,7 @@ export const veiculoCreateSchema = z.object({
   tipo: z.enum(['sedan', 'suv', 'pickup', 'van', 'hatch']),
   combustivel: z.enum(['gasolina', 'etanol', 'diesel', 'flex', 'eletrico', 'hibrido']),
   modelo: z.string().max(100).optional(),
-  cor: z.string().optional(),
+  cor_hex: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Cor deve estar no formato hexadecimal #RRGGBB').optional(),
   ano: z.number().int().min(1900).max(new Date().getFullYear() + 1).nullable().optional(),
   ativo: z.boolean().optional().default(true),
 });
@@ -17,7 +17,7 @@ export const veiculoUpdateSchema = z.object({
   tipo: z.enum(['sedan', 'suv', 'pickup', 'van', 'hatch']).optional(),
   combustivel: z.enum(['gasolina', 'etanol', 'diesel', 'flex', 'eletrico', 'hibrido']).optional(),
   modelo: z.string().max(100).optional(),
-  cor: z.string().optional(),
+  cor_hex: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Cor deve estar no formato hexadecimal #RRGGBB').optional(),
   ano: z.number().int().min(1900).max(new Date().getFullYear() + 1).nullable().optional(),
   ativo: z.boolean().optional(),
 });

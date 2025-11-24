@@ -11,19 +11,22 @@ class DashboardController {
             .execute();
         const veiculosComStatus = await Promise.all(veiculos.map(async (veiculo) => {
             let status = 'disponivel';
+            let usuario_nome = undefined;
             if (!veiculo.ativo) {
                 status = 'inativo';
             }
             else {
                 const reservaAtiva = await db_1.db
                     .selectFrom('reservas')
-                    .select('id')
-                    .where('veiculo_id', '=', veiculo.id)
-                    .where('start_at', '<=', new Date())
-                    .where('end_at', '>', new Date())
+                    .innerJoin('usuarios', 'reservas.usuario_id', 'usuarios.id')
+                    .select(['reservas.id', 'usuarios.nome as usuario_nome'])
+                    .where('reservas.veiculo_id', '=', veiculo.id)
+                    .where('reservas.start_at', '<=', new Date())
+                    .where('reservas.end_at', '>', new Date())
                     .executeTakeFirst();
                 if (reservaAtiva) {
                     status = 'em_uso';
+                    usuario_nome = reservaAtiva.usuario_nome;
                 }
                 else {
                     const dispositivo = await db_1.db
@@ -37,7 +40,7 @@ class DashboardController {
                     }
                 }
             }
-            return { ...veiculo, status };
+            return { ...veiculo, status, usuario_nome };
         }));
         res.json(veiculosComStatus);
     }

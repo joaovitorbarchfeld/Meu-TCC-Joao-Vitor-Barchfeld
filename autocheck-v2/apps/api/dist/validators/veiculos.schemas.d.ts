@@ -5,7 +5,7 @@ export declare const veiculoCreateSchema: z.ZodObject<{
     tipo: z.ZodEnum<["sedan", "suv", "pickup", "van", "hatch"]>;
     combustivel: z.ZodEnum<["gasolina", "etanol", "diesel", "flex", "eletrico", "hibrido"]>;
     modelo: z.ZodOptional<z.ZodString>;
-    cor: z.ZodOptional<z.ZodString>;
+    cor_hex: z.ZodOptional<z.ZodString>;
     ano: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     ativo: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
 }, "strip", z.ZodTypeAny, {
@@ -14,18 +14,18 @@ export declare const veiculoCreateSchema: z.ZodObject<{
     placa: string;
     tipo: "sedan" | "suv" | "pickup" | "van" | "hatch";
     combustivel: "gasolina" | "etanol" | "diesel" | "flex" | "eletrico" | "hibrido";
+    cor_hex?: string | undefined;
     ano?: number | null | undefined;
     modelo?: string | undefined;
-    cor?: string | undefined;
 }, {
     nome: string;
     placa: string;
     tipo: "sedan" | "suv" | "pickup" | "van" | "hatch";
     combustivel: "gasolina" | "etanol" | "diesel" | "flex" | "eletrico" | "hibrido";
     ativo?: boolean | undefined;
+    cor_hex?: string | undefined;
     ano?: number | null | undefined;
     modelo?: string | undefined;
-    cor?: string | undefined;
 }>;
 export declare const veiculoUpdateSchema: z.ZodObject<{
     nome: z.ZodOptional<z.ZodString>;
@@ -33,7 +33,7 @@ export declare const veiculoUpdateSchema: z.ZodObject<{
     tipo: z.ZodOptional<z.ZodEnum<["sedan", "suv", "pickup", "van", "hatch"]>>;
     combustivel: z.ZodOptional<z.ZodEnum<["gasolina", "etanol", "diesel", "flex", "eletrico", "hibrido"]>>;
     modelo: z.ZodOptional<z.ZodString>;
-    cor: z.ZodOptional<z.ZodString>;
+    cor_hex: z.ZodOptional<z.ZodString>;
     ano: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     ativo: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
@@ -42,18 +42,18 @@ export declare const veiculoUpdateSchema: z.ZodObject<{
     placa?: string | undefined;
     tipo?: "sedan" | "suv" | "pickup" | "van" | "hatch" | undefined;
     combustivel?: "gasolina" | "etanol" | "diesel" | "flex" | "eletrico" | "hibrido" | undefined;
+    cor_hex?: string | undefined;
     ano?: number | null | undefined;
     modelo?: string | undefined;
-    cor?: string | undefined;
 }, {
     nome?: string | undefined;
     ativo?: boolean | undefined;
     placa?: string | undefined;
     tipo?: "sedan" | "suv" | "pickup" | "van" | "hatch" | undefined;
     combustivel?: "gasolina" | "etanol" | "diesel" | "flex" | "eletrico" | "hibrido" | undefined;
+    cor_hex?: string | undefined;
     ano?: number | null | undefined;
     modelo?: string | undefined;
-    cor?: string | undefined;
 }>;
 export declare const veiculoFilterSchema: z.ZodObject<{
     q: z.ZodOptional<z.ZodString>;

@@ -8,7 +8,7 @@ exports.veiculoCreateSchema = zod_1.z.object({
     tipo: zod_1.z.enum(['sedan', 'suv', 'pickup', 'van', 'hatch']),
     combustivel: zod_1.z.enum(['gasolina', 'etanol', 'diesel', 'flex', 'eletrico', 'hibrido']),
     modelo: zod_1.z.string().max(100).optional(),
-    cor: zod_1.z.string().optional(),
+    cor_hex: zod_1.z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Cor deve estar no formato hexadecimal #RRGGBB').optional(),
     ano: zod_1.z.number().int().min(1900).max(new Date().getFullYear() + 1).nullable().optional(),
     ativo: zod_1.z.boolean().optional().default(true),
 });
@@ -18,7 +18,7 @@ exports.veiculoUpdateSchema = zod_1.z.object({
     tipo: zod_1.z.enum(['sedan', 'suv', 'pickup', 'van', 'hatch']).optional(),
     combustivel: zod_1.z.enum(['gasolina', 'etanol', 'diesel', 'flex', 'eletrico', 'hibrido']).optional(),
     modelo: zod_1.z.string().max(100).optional(),
-    cor: zod_1.z.string().optional(),
+    cor_hex: zod_1.z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Cor deve estar no formato hexadecimal #RRGGBB').optional(),
     ano: zod_1.z.number().int().min(1900).max(new Date().getFullYear() + 1).nullable().optional(),
     ativo: zod_1.z.boolean().optional(),
 });

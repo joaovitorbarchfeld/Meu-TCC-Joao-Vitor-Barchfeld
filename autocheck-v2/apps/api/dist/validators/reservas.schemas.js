@@ -10,7 +10,13 @@ exports.reservaCreateSchema = zod_1.z.object({
     start_at: dateTimeSchema,
     end_at: dateTimeSchema,
     motivo: zod_1.z.string().max(500, 'Motivo deve ter no máximo 500 caracteres').optional(),
-}).refine((data) => new Date(data.start_at) < new Date(data.end_at), { message: 'Data de início deve ser anterior à data de fim', path: ['end_at'] }).refine((data) => new Date(data.start_at) >= new Date(), { message: 'Data de início não pode ser no passado', path: ['start_at'] });
+}).refine((data) => new Date(data.start_at) < new Date(data.end_at), { message: 'Data de início deve ser anterior à data de fim', path: ['end_at'] }).refine((data) => {
+    const startDate = new Date(data.start_at);
+    const now = new Date();
+    // Permite criar reserva até 5 minutos no passado (tolerância)
+    const fiveMinutesAgo = new Date(now.getTime() - 60 * 60 * 1000);
+    return startDate >= fiveMinutesAgo;
+}, { message: 'Data de início não pode ser muito antiga (tolerância de 1 hora)', path: ['start_at'] });
 exports.reservaUpdateSchema = zod_1.z.object({
     start_at: dateTimeSchema.optional(),
     end_at: dateTimeSchema.optional(),

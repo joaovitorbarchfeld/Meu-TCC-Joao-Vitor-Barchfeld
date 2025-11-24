@@ -65,7 +65,7 @@ export default function Usuarios() {
       const data: any = { nome, email, perfil };
 
       if (editingId) {
-        if (password) data.password = password;
+        if (password) data.senha = password;
         await usuariosApi.update(editingId, data);
       } else {
         if (!password) {
@@ -73,7 +73,7 @@ export default function Usuarios() {
           setIsSubmitting(false);
           return;
         }
-        data.password = password;
+        data.senha = password;
         await usuariosApi.create(data);
       }
 

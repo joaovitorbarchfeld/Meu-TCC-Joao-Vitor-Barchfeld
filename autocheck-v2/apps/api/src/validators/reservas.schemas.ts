@@ -1,4 +1,4 @@
-﻿import { z } from 'zod';
+import { z } from 'zod';
 
 // Aceita datetime com ou sem timezone
 const dateTimeSchema = z.string().refine(
@@ -16,8 +16,14 @@ export const reservaCreateSchema = z.object({
   (data) => new Date(data.start_at) < new Date(data.end_at),
   { message: 'Data de início deve ser anterior à data de fim', path: ['end_at'] }
 ).refine(
-  (data) => new Date(data.start_at) >= new Date(),
-  { message: 'Data de início não pode ser no passado', path: ['start_at'] }
+  (data) => {
+    const startDate = new Date(data.start_at);
+    const now = new Date();
+    // Permite criar reserva até 5 minutos no passado (tolerância)
+    const fiveMinutesAgo = new Date(now.getTime() - 60 * 60 * 1000);
+    return startDate >= fiveMinutesAgo;
+  },
+  { message: 'Data de início não pode ser muito antiga (tolerância de 1 hora)', path: ['start_at'] }
 );
 
 export const reservaUpdateSchema = z.object({

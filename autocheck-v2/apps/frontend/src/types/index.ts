@@ -22,6 +22,7 @@ export interface Veiculo {
   ano: number | null;
   ativo: boolean;
   status?: 'inativo' | 'em_uso' | 'sem_dispositivo' | 'disponivel';
+  usuario_nome?: string;
 }
 
 export interface Reserva {

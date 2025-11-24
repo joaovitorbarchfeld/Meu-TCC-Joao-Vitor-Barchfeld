@@ -8,7 +8,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -34,7 +33,7 @@ export default function Login() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-full mb-4">
             <Car className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">AutoCheck v2</h1>
+          <h1 className="text-3xl font-bold text-gray-900">AutoCheck</h1>
           <p className="text-gray-600 mt-2">Sistema de Reservas de Veículos</p>
         </div>
 
@@ -83,11 +82,6 @@ export default function Login() {
             {isLoading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
-
-        <div className="mt-6 text-center text-sm text-gray-600">
-          <p>Credenciais de teste:</p>
-          <p className="font-mono text-xs mt-1">admin@autocheck.com / autocheck123</p>
-        </div>
       </div>
     </div>
   );

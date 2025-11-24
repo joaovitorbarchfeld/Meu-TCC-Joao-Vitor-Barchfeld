@@ -2,17 +2,17 @@ import type { ReservaCreateInput, ReservaUpdateInput, ReservaFilter, ReservaCale
 export declare class ReservasService {
     list(filters: ReservaFilter, usuarioLogadoId?: string): Promise<{
         data: {
+            usuario_id: string;
             id: string;
             created_at: Date;
-            usuario_id: string;
             veiculo_id: string;
             start_at: Date;
             end_at: Date;
             motivo: string | null;
+            usuario_nome: string;
             veiculo_nome: string;
             veiculo_placa: string;
             veiculo_cor: string;
-            usuario_nome: string;
             usuario_email: string;
         }[];
         meta: {
@@ -23,18 +23,18 @@ export declare class ReservasService {
         };
     }>;
     getById(id: string): Promise<{
+        usuario_id: string;
         id: string;
         created_at: Date;
         updated_at: Date;
-        usuario_id: string;
         veiculo_id: string;
         start_at: Date;
         end_at: Date;
         motivo: string | null;
+        usuario_nome: string;
         veiculo_nome: string;
         veiculo_placa: string;
         veiculo_cor: string;
-        usuario_nome: string;
         usuario_email: string;
         veiculo_tipo: "sedan" | "suv" | "pickup" | "van" | "hatch";
         usuario_perfil: "colaborador" | "gestor" | "admin";
@@ -64,17 +64,17 @@ export declare class ReservasService {
     }>;
     getMinhasReservas(usuarioId: string, status?: 'todas' | 'ativa' | 'futura' | 'passada'): Promise<{
         data: {
+            usuario_id: string;
             id: string;
             created_at: Date;
-            usuario_id: string;
             veiculo_id: string;
             start_at: Date;
             end_at: Date;
             motivo: string | null;
+            usuario_nome: string;
             veiculo_nome: string;
             veiculo_placa: string;
             veiculo_cor: string;
-            usuario_nome: string;
             usuario_email: string;
         }[];
         meta: {
@@ -85,16 +85,16 @@ export declare class ReservasService {
         };
     }>;
     getCalendario(filters: ReservaCalendarioFilter): Promise<{
-        id: string;
         usuario_id: string;
+        id: string;
         veiculo_id: string;
         start_at: Date;
         end_at: Date;
         motivo: string | null;
+        usuario_nome: string;
         veiculo_nome: string;
         veiculo_placa: string;
         veiculo_cor: string;
-        usuario_nome: string;
     }[]>;
     private checkOverlap;
 }

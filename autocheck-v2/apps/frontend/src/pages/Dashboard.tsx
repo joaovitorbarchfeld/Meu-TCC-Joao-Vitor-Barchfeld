@@ -24,10 +24,14 @@ export default function Dashboard() {
     { id: 5, name: 'Dispositivos', icon: Cpu, route: '/dispositivos' }
   ];
 
-  const getStatusInfo = (status?: string) => {
+  const getStatusInfo = (veiculo: Veiculo) => {
+    const status = veiculo.status;
     const map: Record<string, { color: string; text: string }> = {
       'disponivel': { color: '#16a34a', text: 'Disponível' },
-      'em_uso': { color: '#dc2626', text: 'Em uso' },
+      'em_uso': { 
+        color: '#dc2626', 
+        text: veiculo.usuario_nome ? `Em uso - ${veiculo.usuario_nome}` : 'Em uso'
+      },
       'sem_dispositivo': { color: '#f59e0b', text: 'Sem dispositivo' },
       'inativo': { color: '#6b7280', text: 'Inativo' }
     };
@@ -38,7 +42,7 @@ export default function Dashboard() {
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #071327 0%, #2C0F4D 100%)' }}>
       {/* Header */}
       <header style={{ position: 'relative', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 1.5rem' }}>
-        <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#ffffff', margin: 0 }}>AutoCheck v2</h1>
+        <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#ffffff', margin: 0 }}>AutoCheck</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button style={{ padding: '0.5rem', color: '#ffffff', background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: '0.5rem', position: 'relative' }}>
             <Bell size={16} color="#ffffff" />
@@ -108,7 +112,7 @@ export default function Dashboard() {
             <h3 style={{ color: '#ffffff', fontWeight: '600', marginBottom: '1rem', fontSize: '1rem' }}>Veículos</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {vehicles.map(v => {
-                const info = getStatusInfo(v.status);
+                const info = getStatusInfo(v);
                 return (
                   <div key={v.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', borderRadius: '8px', cursor: 'pointer' }}>
                     <div style={{ padding: '8px', borderRadius: '8px', background: v.cor_hex + '20', flexShrink: 0 }}>
@@ -134,7 +138,7 @@ export default function Dashboard() {
 
       {/* Footer */}
       <footer style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 40, padding: '12px', background: 'rgba(0,0,0,0.6)', textAlign: 'center' }}>
-        <p style={{ color: '#ffffff', fontSize: '14px', margin: 0 }}>AutoCheck v2 – João Vítor Barchfeld – SETREM 2025</p>
+        <p style={{ color: '#ffffff', fontSize: '14px', margin: 0 }}>AutoCheck – João Vítor Barchfeld – SETREM 2025</p>
       </footer>
     </div>
   );

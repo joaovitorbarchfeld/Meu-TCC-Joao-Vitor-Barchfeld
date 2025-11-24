@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { dispositivosApi, veiculosApi } from '../services/api';
 import { Cpu, Plus, Edit, Trash2, ArrowLeft, Search, Link, Unlink, X, Power } from 'lucide-react';
@@ -75,7 +75,7 @@ export default function Dispositivos() {
     try {
       const data = {
         identificador,
-        descricao: descricao || null,
+        descricao: descricao || undefined,
         ativo: true
       };
 
@@ -141,7 +141,7 @@ export default function Dispositivos() {
     setEditingId(null);
   };
 
-  const filteredDispositivos = dispositivos.filter(d => 
+  const filteredDispositivos = dispositivos.filter(d =>
     d.identificador.toLowerCase().includes(searchTerm.toLowerCase()) ||
     d.descricao?.toLowerCase().includes(searchTerm.toLowerCase())
   );

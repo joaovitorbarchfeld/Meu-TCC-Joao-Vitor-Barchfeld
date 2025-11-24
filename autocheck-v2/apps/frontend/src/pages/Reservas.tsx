@@ -32,13 +32,13 @@ export default function Reservas() {
   const loadData = async () => {
     try {
       const [reservasData, veiculosData, usuariosData] = await Promise.all([
-        reservasApi.minhas(),
+        reservasApi.list(),
         veiculosApi.list(),
         usuariosApi.list()
       ]);
       setReservas(reservasData);
       setVeiculos(veiculosData.filter(v => v.ativo));
-      setUsuarios(usuariosData.filter(u => u.ativo));
+      setUsuarios(usuariosData.filter(u => u.ativo && u.perfil !== 'admin'));
     } catch (err) {
       console.error('Erro ao carregar dados:', err);
     } finally {
@@ -52,11 +52,15 @@ export default function Reservas() {
     setIsSubmitting(true);
 
     try {
+      // Converter horário local para ISO UTC corretamente
+      const startDate = new Date(startAt);
+      const endDate = new Date(endAt);
+
       const dados = {
         veiculo_id: veiculoId,
         usuario_id: usuarioId,
-        start_at: startAt + ':00.000Z',
-        end_at: endAt + ':00.000Z',
+        start_at: startDate.toISOString(),
+        end_at: endDate.toISOString(),
         motivo: motivo || undefined
       };
       console.log('Enviando:', dados);
@@ -66,7 +70,7 @@ export default function Reservas() {
       resetForm();
       loadData();
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Erro ao criar reserva');
+      setError(err.response?.data?.error || err.response?.data?.message || 'Erro ao criar reserva');
     } finally {
       setIsSubmitting(false);
     }
@@ -119,7 +123,7 @@ export default function Reservas() {
           <button onClick={() => navigate('/dashboard')} style={{ padding: '0.5rem', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', color: '#fff' }}>
             <ArrowLeft size={20} />
           </button>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#ffffff', margin: 0 }}>Minhas Reservas</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#ffffff', margin: 0 }}>Reservas</h1>
         </div>
         <button onClick={() => setShowModal(true)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: '500' }}>
           <Plus size={20} />
@@ -144,9 +148,20 @@ export default function Reservas() {
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
                       <Car size={24} color="#fff" />
-                      <div>
+                      <div style={{ flex: 1 }}>
                         <h3 style={{ color: '#fff', fontSize: '1.125rem', fontWeight: '600', margin: 0 }}>{reserva.veiculo_nome}</h3>
-                        <p style={{ color: '#d1d5db', fontSize: '0.875rem', margin: 0 }}>{reserva.veiculo_placa}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.25rem' }}>
+                          <p style={{ color: '#d1d5db', fontSize: '0.875rem', margin: 0 }}>{reserva.veiculo_placa}</p>
+                          {reserva.usuario_nome && (
+                            <>
+                              <span style={{ color: '#6b7280' }}>•</span>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <User size={14} color="#9ca3af" />
+                                <p style={{ color: '#d1d5db', fontSize: '0.875rem', margin: 0 }}>{reserva.usuario_nome}</p>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -206,9 +221,9 @@ export default function Reservas() {
               <div>
                 <label style={{ display: 'block', color: '#d1d5db', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Veículo</label>
                 <select value={veiculoId} onChange={e => setVeiculoId(e.target.value)} required style={{ width: '100%', padding: '0.75rem', background: '#334155', color: '#fff', border: '1px solid #475569', borderRadius: '0.5rem' }}>
-                  <option value="" style={{ color: '#000' }}>Selecione um veículo</option>
+                  <option value="" style={{ color: '#fff' }}>Selecione um veículo</option>
                   {veiculos.filter(v => v.status === 'disponivel').map(v => (
-                    <option key={v.id} value={v.id} style={{ color: '#000' }}>{v.nome} - {v.placa}</option>
+                    <option key={v.id} value={v.id} style={{ color: '#fff' }}>{v.nome} - {v.placa}</option>
                   ))}
                 </select>
               </div>
@@ -216,9 +231,9 @@ export default function Reservas() {
               <div>
                 <label style={{ display: 'block', color: '#d1d5db', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Usuário Responsável</label>
                 <select value={usuarioId} onChange={e => setUsuarioId(e.target.value)} required style={{ width: '100%', padding: '0.75rem', background: '#334155', color: '#fff', border: '1px solid #475569', borderRadius: '0.5rem' }}>
-                  <option value="" style={{ color: '#000' }}>Selecione o usuário</option>
+                  <option value="" style={{ color: '#fff' }}>Selecione o usuário</option>
                   {usuarios.map(u => (
-                    <option key={u.id} value={u.id} style={{ color: '#000' }}>{u.nome}</option>
+                    <option key={u.id} value={u.id} style={{ color: '#fff' }}>{u.nome}</option>
                   ))}
                 </select>
               </div>
